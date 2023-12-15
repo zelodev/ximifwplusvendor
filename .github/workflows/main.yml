@@ -37,4 +37,5 @@ jobs:
       - name: upload artifact (flashable is inside artifact)
         uses: actions/upload-artifact@v3
         with:
+          compression-level: 0
           path: /home/runner/work/ximifwplusvendor/fw-vendor*.zip

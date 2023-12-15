@@ -30,14 +30,13 @@ jobs:
         working-directory: /home/runner/work/ximifwplusvendor
         run: axel -o miui_rom.zip ${{ github.event.inputs.rom_link }}
       
-      - name: execute python script
+      - name: execute firmware creator
         working-directory: /home/runner/work/ximifwplusvendor
         run: xiaomi_flashable_firmware_creator -V miui_rom.zip
 
-      - name: upload final
+      - name: upload artifact (flashable is inside artifact)
         uses: actions/upload-artifact@v3
         with:
-          name: final
           working-directory: /home/runner/work/ximifwplusvendor
           path: |
             *.zip

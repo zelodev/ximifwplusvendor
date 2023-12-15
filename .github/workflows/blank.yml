@@ -1,0 +1,44 @@
+name: build firmware+vendor
+
+on:
+  workflow_dispatch:
+    inputs:
+      rom_link:
+        description: "rom download link (use ks3orig mirror, usually mirror #2. no https)"
+        required: true
+        type: string
+
+jobs:
+  onDispatch:
+    name: On Dispatch
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v4.1.1
+        
+      - name: install deps
+        uses: daaku/gh-action-apt-install@v4
+        with:
+          packages: python3 python3-pip axel
+
+      - name: install firmware creator
+        run: |
+          pip install --upgrade pip
+          pip3 install xiaomi_flashable_firmware_creator
+
+      - name: download ROM
+        working-directory: /home/runner/work/ximifwplusvendor
+        run: axel -o miui_rom.zip ${{ github.event.inputs.rom_link }}
+      
+      - name: execute python script
+        working-directory: /home/runner/work/ximifwplusvendor
+        run: xiaomi_flashable_firmware_creator -V miui_rom.zip
+
+      - name: upload final
+        uses: actions/upload-artifact@v3
+        with:
+          name: final
+          working-directory: /home/runner/work/ximifwplusvendor
+          path: |
+            *.zip
+            !miui_rom.zip

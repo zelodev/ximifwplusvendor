@@ -37,7 +37,4 @@ jobs:
       - name: upload artifact (flashable is inside artifact)
         uses: actions/upload-artifact@v3
         with:
-          working-directory: /home/runner/work/ximifwplusvendor
-          path: |
-            *.zip
-            !miui_rom.zip
+          path: /home/runner/work/ximifwplusvendor/fw-vendor*.zip
